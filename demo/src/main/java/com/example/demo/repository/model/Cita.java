@@ -3,6 +3,8 @@ package com.example.demo.repository.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,20 +49,25 @@ public class Cita {
 
     @ManyToOne
     @JoinColumn(name = "cita_id_trata")
+    @JsonIgnore
     private Tratamiento tratamiento;
     
     @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Pago> pagos; 
 
     @ManyToOne
     @JoinColumn(name = "cita_id_admin")
+    @JsonIgnore
     private Administrador administrador;
 
     @ManyToOne
     @JoinColumn(name = "cita_id_dent")
+    @JsonIgnore
     private Dentista dentista;
 
     @ManyToOne
     @JoinColumn(name = "cita_id_paci")
+    @JsonIgnore
     private Paciente paciente;
 }

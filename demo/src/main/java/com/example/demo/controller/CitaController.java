@@ -33,7 +33,10 @@ public class CitaController {
 
     @PostMapping()
     public ResponseEntity<Cita> insertar(@RequestBody CitaDTO citaDTO){
-        return null;
+
+        Cita cita = this.citaTratamientoPago.insertarCitaPago(citaDTO);
+
+        return new ResponseEntity<>(cita, null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -10,6 +10,7 @@ import com.example.demo.repository.model.Cita;
 import com.example.demo.repository.model.Dentista;
 import com.example.demo.repository.model.Paciente;
 import com.example.demo.repository.model.Pago;
+import com.example.demo.service.dto.CitaDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -27,16 +28,17 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
 
     @Override
     @Transactional
-    public Cita insertarCitaPago(Cita cita, String tratamiento, Pago pago, String cedulaDentista,
-                                  String cedulaPaciente, String cedulaAdministradro) {
+    public Cita insertarCitaPago(CitaDTO citaDTO) {
 
-        cita.setEstado(true);
-        cita.setFechaCreacion(LocalDateTime.now());
+        citaDTO.setEstado(true);
+        citaDTO.setFechaCreacion(LocalDateTime.now());
         
 
-        Paciente paciente = obtenerPaciente(cedulaPaciente);
-        Dentista dentista = obtenerDentista(cedulaDentista);
-        Administrador administrador = obtenerAdministrador(cedulaAdministradro);
+        Paciente paciente = obtenerPaciente(citaDTO.getCedulaPaciente());
+        Dentista dentista = obtenerDentista(citaDTO.getCedulaDentista());
+        Administrador administrador = obtenerAdministrador(citaDTO.getCedulaAdministrador());
+
+        Cita cita = this.convertirCita(citaDTO);
 
         cita.setDentista(dentista);
         cita.setPaciente(paciente);
@@ -47,8 +49,10 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
         Cita citaPersistida = this.citaService.buscarPorTurno(cita.getTurno())
                 .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada después de la inserción"));
 
+        Pago pago = new Pago();
         pago.setCita(citaPersistida);
         pago.setEstado(false);
+        pago.setAdministrador(administrador);
         this.pagoService.insertar(pago);
 
         return citaPersistida;
@@ -70,6 +74,29 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
         return this.usuarioService.buscarPorCedula(cedula)
                 .orElseThrow(() -> new IllegalArgumentException("Administrador no encontrado para cédula: " + cedula))
                 .getAdministradores().getFirst();
+    }
+
+    private Cita convertirCita(CitaDTO dto){
+        Cita cita = new Cita();
+        cita.setEstado(dto.getEstado());
+        cita.setFechaCita(dto.getFechaCita());
+        cita.setFechaCreacion(dto.getFechaCreacion());
+        cita.setNotas(dto.getNotas());
+        cita.setTurno(dto.getTurno());
+
+        return cita;
+    }
+
+    private CitaDTO convertirCitaDTO(Cita cita){
+        CitaDTO dto = new CitaDTO();
+        dto.setId(cita.getId());
+        dto.setEstado(cita.getEstado());
+        dto.setFechaCita(cita.getFechaCita());
+        dto.setFechaCreacion(cita.getFechaCreacion());
+        dto.setNotas(cita.getNotas());
+        dto.setTurno(cita.getTurno());
+
+        return dto;
     }
 
 }
