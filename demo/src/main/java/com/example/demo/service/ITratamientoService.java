@@ -11,6 +11,8 @@ public interface ITratamientoService {
 
     public Optional<Tratamiento> buscarPorId(Integer id);
 
+    public Optional<Tratamiento> buscarPorNombre(String nombre);
+
     public List<Tratamiento> buscarTodosLosTratamientos();
 
     public Tratamiento actualizar(Tratamiento tratamiento);

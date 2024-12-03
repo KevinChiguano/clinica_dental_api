@@ -10,6 +10,7 @@ import com.example.demo.repository.model.Cita;
 import com.example.demo.repository.model.Dentista;
 import com.example.demo.repository.model.Paciente;
 import com.example.demo.repository.model.Pago;
+import com.example.demo.repository.model.Tratamiento;
 import com.example.demo.service.dto.CitaDTO;
 
 import jakarta.transaction.Transactional;
@@ -26,6 +27,9 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
     @Autowired
     private IPagoService pagoService;
 
+    @Autowired
+    private ITratamientoService tratamientoService;
+
     @Override
     @Transactional
     public Cita insertarCitaPago(CitaDTO citaDTO) {
@@ -38,11 +42,14 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
         Dentista dentista = obtenerDentista(citaDTO.getCedulaDentista());
         Administrador administrador = obtenerAdministrador(citaDTO.getCedulaAdministrador());
 
+        Tratamiento tratamiento = obtenerTratamiento(citaDTO.getTratamiento());
+
         Cita cita = this.convertirCita(citaDTO);
 
         cita.setDentista(dentista);
         cita.setPaciente(paciente);
         cita.setAdministrador(administrador);
+        cita.setTratamiento(tratamiento);
 
         this.citaService.insertar(cita);
 
@@ -74,6 +81,11 @@ public class GestorCitaTratamientoImpl implements IGestorCitaTratamientoPago {
         return this.usuarioService.buscarPorCedula(cedula)
                 .orElseThrow(() -> new IllegalArgumentException("Administrador no encontrado para cédula: " + cedula))
                 .getAdministradores().getFirst();
+    }
+
+    private Tratamiento obtenerTratamiento(String tratamiento) {
+        return this.tratamientoService.buscarPorNombre(tratamiento)
+                .orElseThrow(() -> new IllegalArgumentException("Tratamiento: " + tratamiento+" no encontrado."));
     }
 
     private Cita convertirCita(CitaDTO dto){

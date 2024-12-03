@@ -29,5 +29,7 @@ public class CitaDTO {
     private String cedulaAdministrador;
 
     private Pago pago;
+
+    private String tratamiento;
     
 }

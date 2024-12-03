@@ -38,6 +38,15 @@ public class TratamientoServiceImpl implements ITratamientoService{
     }
 
     @Override
+    public Optional<Tratamiento> buscarPorNombre(String nombre) {
+        try {
+            return this.tratamientoRepository.findByNombre(nombre);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar por nombre tratamiento", e);
+        }
+    }
+
+    @Override
     public List<Tratamiento> buscarTodosLosTratamientos() {
         
         try {
@@ -81,5 +90,7 @@ public class TratamientoServiceImpl implements ITratamientoService{
         }
         
     }
+
+    
     
 }
