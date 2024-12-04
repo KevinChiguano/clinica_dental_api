@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.component.UsuarioRolFactory;
+import com.example.demo.factory.UsuarioRolFactory;
 import com.example.demo.repository.model.Administrador;
 import com.example.demo.repository.model.Dentista;
 import com.example.demo.repository.model.Paciente;

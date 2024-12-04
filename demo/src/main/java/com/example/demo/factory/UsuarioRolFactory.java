@@ -1,4 +1,4 @@
-package com.example.demo.component;
+package com.example.demo.factory;
 
 import java.util.Map;
 
