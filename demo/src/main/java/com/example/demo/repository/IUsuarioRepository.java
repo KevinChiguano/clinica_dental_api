@@ -10,4 +10,6 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer>{
 
     Optional<Usuario> findByCedula(String cedula);
 
+    Optional<Usuario> findByEmail(String email);
+
 }

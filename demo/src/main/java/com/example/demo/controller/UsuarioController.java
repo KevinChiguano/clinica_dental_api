@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import com.example.demo.service.dto.UsuarioDTO;
 @RestController
 @CrossOrigin
 @RequestMapping("/usuario")
+@PreAuthorize("denyAll()")
 public class UsuarioController {
 
     @Autowired
@@ -42,6 +44,7 @@ public class UsuarioController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('READ')")
     public ResponseEntity<Optional<Usuario>> consultarPorId(@PathVariable Integer id) {
 
         Optional<Usuario> usuario = this.usuarioService.buscarPorId(id);
@@ -52,6 +55,7 @@ public class UsuarioController {
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<Usuario>> consultarUsuarios() {
 
         List<Usuario> usuarios = this.usuarioService.buscarTodosLosUsuarios();
