@@ -26,7 +26,6 @@ import com.example.demo.service.dto.UsuarioDTO;
 @RestController
 @CrossOrigin
 @RequestMapping("/usuario")
-@PreAuthorize("denyAll()")
 public class UsuarioController {
 
     @Autowired
@@ -44,7 +43,6 @@ public class UsuarioController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('READ')")
     public ResponseEntity<Optional<Usuario>> consultarPorId(@PathVariable Integer id) {
 
         Optional<Usuario> usuario = this.usuarioService.buscarPorId(id);
@@ -55,7 +53,6 @@ public class UsuarioController {
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("permitAll()")
     public ResponseEntity<List<Usuario>> consultarUsuarios() {
 
         List<Usuario> usuarios = this.usuarioService.buscarTodosLosUsuarios();

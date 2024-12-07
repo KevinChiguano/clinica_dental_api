@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.factory.UsuarioRolFactory;
@@ -47,6 +48,8 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
 
         usuario.setActivo(true);
         usuario.setRol(rol);
+
+        usuario.setPassword(this.codificarPassword(usuario.getPassword()));
 
         Usuario usuarioCreado = this.usuarioService.insertar(usuario);
 
@@ -94,14 +97,14 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
             case "dentista":
                 Dentista dentista = this.dentistaService.buscarPorUsuarioId(usuarioTmp.getId())
                         .orElseThrow(() -> new RuntimeException("Dentista no encontrado"));
-                dentista.setEspecialidad((String)  usuarioDTO.getAtributos().get("especialidad"));
+                dentista.setEspecialidad((String) usuarioDTO.getAtributos().get("especialidad"));
                 this.dentistaService.actualizar(dentista);
                 break;
 
             case "paciente":
                 Paciente paciente = this.pacienteService.buscarPorUsuarioId(usuarioTmp.getId())
                         .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-                paciente.setEdad((Integer)  usuarioDTO.getAtributos().get("edad"));
+                paciente.setEdad((Integer) usuarioDTO.getAtributos().get("edad"));
                 this.pacienteService.actualizar(paciente);
                 break;
 
@@ -118,7 +121,6 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
         u.setRol(usuarioTmp.getRol());
 
         Usuario usuarioActualizado = this.usuarioService.actualizar(u);
-
 
         // Crear y retornar UsuarioDTO
 
@@ -166,6 +168,10 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
         usuarioDTO.setPassword(usuario.getPassword());
         usuarioDTO.setRol(usuario.getRol().getNombre());
         return usuarioDTO;
+    }
+
+    private String codificarPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 
 }
