@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,11 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
         Rol rol = this.rolService.buscarPorNombre(usuarioDTO.getRol())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
+        usuario.setFechaCreacion(LocalDateTime.now());
         usuario.setActivo(true);
         usuario.setRol(rol);
 
-        usuario.setPassword(this.codificarPassword(usuario.getPassword()));
+
 
         Usuario usuarioCreado = this.usuarioService.insertar(usuario);
 
@@ -168,10 +170,6 @@ public class GestorUsuarioRolServiceImpl implements IGestorUsuarioRolService {
         usuarioDTO.setPassword(usuario.getPassword());
         usuarioDTO.setRol(usuario.getRol().getNombre());
         return usuarioDTO;
-    }
-
-    private String codificarPassword(String password) {
-        return new BCryptPasswordEncoder().encode(password);
     }
 
 }
