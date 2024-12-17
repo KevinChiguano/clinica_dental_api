@@ -38,6 +38,8 @@ public class JwtGenerator {
                 .parseClaimsJws(token)
                 .getBody();
 
+                System.out.println("usuario del token:"+claims.getSubject());
+
         return claims.getSubject();
     }
 

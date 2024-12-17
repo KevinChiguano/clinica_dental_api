@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = generator.obtenerUserNameDeJwt(token);
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             List<String> userRoles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            if (userRoles.contains("usuario") || userRoles.contains("administrador")) {
+            if (userRoles.contains("paciente") || userRoles.contains("administrador") || userRoles.contains("dentista")) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
